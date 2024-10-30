@@ -188,49 +188,30 @@ class PQ {
 
     void percolateDown(int index) {
       int length = nodes.size();
-      int i = index, left, right;
+      int i = index, left, right, smallest;
 
-      while (2*i+1 < length) {
-        left = 2*i+1;
-        right = 2*i+2;
+      while (2 * i + 1 < length) {
+	left = 2 * i + 1;
+	right = 2 * i + 2;
+	smallest = i;
 
-        if (nodes[left].priority < nodes[i].priority && right >= length) {
-          swap(&nodes[left].priority, &nodes[i].priority);
-          swap(&nodes[left].pointer->index, &nodes[i].pointer->index);
-          swapP(nodes[left].pointer, nodes[i].pointer);
-          i = left;
-        }
-        else if (nodes[left].priority > nodes[i].priority && right >= length) {
-          break;
-        }
-        else if (nodes[i].priority > nodes[left].priority && nodes[i].priority > nodes[right].priority) {
-          if (nodes[left].priority > nodes[right].priority) {
-            swap(&nodes[right].priority, &nodes[i].priority);
-            swap(&nodes[right].pointer->index, &nodes[i].pointer->index);
-            swapP(nodes[right].pointer, nodes[i].pointer);
-            i = right;
-          }
-          else {
-            swap(&nodes[left].priority, &nodes[i].priority);
-            swap(&nodes[left].pointer->index, &nodes[i].pointer->index);
-            swapP(nodes[left].pointer, nodes[i].pointer);
-            i = left;
-          }
-        }
-        else if (nodes[i].priority > nodes[left].priority && nodes[i].priority < nodes[right].priority) {
-          swap(&nodes[left].priority, &nodes[i].priority);
-          swap(&nodes[left].pointer->index, &nodes[i].pointer->index);
-          swapP(nodes[left].pointer, nodes[i].pointer);
-          i = left;
-        }
-        else if (nodes[i].priority < nodes[left].priority && nodes[i].priority > nodes[right].priority) {
-          swap(&nodes[right].priority, &nodes[i].priority);
-          swap(&nodes[right].pointer->index, &nodes[i].pointer->index);
-          swapP(nodes[right].pointer, nodes[i].pointer);
-          i = right;
-        }
-      }
-        
+	if (left < length && nodes[left].priority < nodes[smallest].priority) {
+	  smallest = left;
+	}
+	if (right < length && nodes[right].priority < nodes[smallest].priority) {
+	  smallest = right;
+	}
+
+	if (smallest != i) {
+	  swap(&nodes[smallest].priority, &nodes[i].priority);
+	  swap(&nodes[smallest].pointer->index, &nodes[i].pointer->index);
+	  swapP(nodes[smallest].pointer, nodes[i].pointer);
+	  i = smallest;
+	} 
+	else {
+	  break;
+	}
+      }    
     }
 
     void percolateUp(int i) {
